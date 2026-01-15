@@ -10,6 +10,7 @@ import { connnections } from '../config/';
 import DeviceGaurd from './device.guard';
 import RateLimiter from './rate.limiter';
 import IPGaurd from './ip.guard';
+import TokenGuard from './token.guard.js';
 
 
 export async function securityGuards() {
@@ -17,10 +18,12 @@ export async function securityGuards() {
   const deviceGaurd = new DeviceGaurd(redis);
   const rateLimiter = new RateLimiter(redis);
   const iPGuard     = new IPGaurd(redis);
+  const tokenGuard  = new TokenGuard(redis);
 
   return {
     deviceGaurd,
     rateLimiter,
-    iPGuard
+    iPGuard,
+    tokenGuard
   };
 }

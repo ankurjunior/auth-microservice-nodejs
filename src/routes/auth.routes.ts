@@ -11,8 +11,10 @@ import loginResultLogger from "../logger/loginResult.logger.js";
 import authTokenRotationLogger from "../logger/authTokenRotation.logger.js";
 import {securityGuards} from "../security/index.js";
 import securityMiddleware from "../middleware/security.middleware.js"; 
+import authCheck from "../middleware/auth.check.middleware.js";
 
-const secure  = securityMiddleware(securityGuards);
+const secure    = securityMiddleware(securityGuards);
+const AuthCheck = authCheck(securityGuards);
  
 /**
  * @swagger
@@ -63,6 +65,8 @@ router.post(
  *   post:
  *     summary: Token Rotation
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -74,7 +78,7 @@ router.post(
  *             properties:
  *               refreshToken:
  *                 type: string
- *                 example: xxxxxxxxxxxx 
+ *                 example: xxxxxxxxxxxx
  *     responses:
  *       200:
  *         description: New Token Received
@@ -88,9 +92,11 @@ router.post(
  *       401:
  *         description: Invalid credentials
  */
-router.post("/refresh", authTokenRotationLogger, async (req: Request, res : Response, next: NextFunction) => {
+
+router.post("/refresh", AuthCheck, secure, authTokenRotationLogger, async (req: Request, res : Response, next: NextFunction) => {
   const { refreshToken } = req.body;
-  const response = await req.tokenService.refresh(refreshToken);
+  // const response = await req.tokenService.refresh(refreshToken);
+  const response = '';
   return res.json(response);
 });
 

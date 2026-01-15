@@ -9,8 +9,8 @@
 
 import express, { Request, Response, NextFunction } from "express";
 import authRoutes from "../../routes/auth.routes";
-import AuthService from "../../services/auth.service";
-import StrategyFactory from "../../factories/strategy.factory";
+import AuthService from "../../services/auth.service.js";
+import StrategyFactory from "../../factories/strategy.factory.js";
 import UserRepository from "../../repositories/user.mysql.repo";
 import TokenFactory from "../../factories/token.factory";
 import TokenService from "../../services/token.service";
