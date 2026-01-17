@@ -6,8 +6,8 @@
  * 2026 Ankur Gangwar
  */
 
-import { Request, Response } from "express"; 
- 
+import { Request, Response } from "express";
+
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const token = await req.authService.login(
@@ -28,14 +28,24 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
+
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      res.status(401).json({
+        message:  "Gadbad ho gai h!!"
+      });
+    }
+    
     await req.logoutService.logout({
-      accessToken: req.headers.authorization,
+      accessToken: token,
       refreshJTI: req.body?.refreshJti
     });
+
     res.json({ message: "Logged out successfully" });
   } catch (err: any) {
     res.status(403).json({
       message: err.message || "Gadbad ho gai h!!"
-    }); 
+    });
   }
 }

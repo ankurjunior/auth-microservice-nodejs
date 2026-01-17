@@ -15,12 +15,14 @@ import StrategyFactory from "../../factories/strategy.factory.js";
 import UserRepository from "../../repositories/user.mysql.repo";
 import TokenFactory from "../../factories/token.factory";
 import TokenService from "../../services/token.service";
+import { securityGuards } from "../../security/index.js";  
 
-const  AuthModule = (options :any) => {
+const  AuthModule = async (options :any) => {
   
-  const router   = express.Router();
-  const userRepo = new UserRepository(options.mysql);
-  const redis    = options.redis;
+  const router         = express.Router();
+  const userRepo       = new UserRepository(options.mysql);
+  const redis          = options.redis;
+  const { tokenGuard } = await securityGuards();
 
   /**
    * 
@@ -42,7 +44,7 @@ const  AuthModule = (options :any) => {
 
 
   const tokenService  = new TokenService(tokenFactory);
-  const logoutService = new LogoutService(redis);
+  const logoutService = new LogoutService(tokenGuard);
   const authService   = new AuthService({authStrategies, tokenService});
 
 
@@ -54,7 +56,6 @@ const  AuthModule = (options :any) => {
   });
  
  
-
   router.use(authRoutes);
 
   return router;

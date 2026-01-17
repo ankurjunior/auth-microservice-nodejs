@@ -7,7 +7,7 @@
 
 import mongoose, { Mongoose } from "mongoose";
 import dotenv from "dotenv";
-
+import log from "../utils/logger.util.js";
 dotenv.config();
 
 
@@ -31,17 +31,17 @@ class MongoDBCLient {
           serverSelectionTimeoutMS: 5000,
         });
 
-        console.log(
+        log.success(
           `MongoDB connected: ${MongoDBCLient.instance.connection.host}`
         );
 
         mongoose.connection.on("error", (err) => {
-          console.error("MongoDB runtime error:", err);
+          log.error("MongoDB runtime error:", err);
         });
 
 
       } catch (err: any) {
-        console.error("MongoDB connection failed:", err.message);
+        log.error("MongoDB connection failed:", err.message);
         process.exit(1);
       }
 

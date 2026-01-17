@@ -8,6 +8,7 @@
 
 import Redis, { RedisOptions } from "ioredis";
 import dotenv from "dotenv";
+import log from "../utils/logger.util.js";
 
 dotenv.config();
 
@@ -34,7 +35,7 @@ class RedisClient {
       RedisClient.instance = new Redis(options);
 
       RedisClient.instance.on("connect", () => {
-        console.log("Redis connected");
+        log.success("Redis connected");
       });
 
       RedisClient.instance.on("error", (err: Error) => {

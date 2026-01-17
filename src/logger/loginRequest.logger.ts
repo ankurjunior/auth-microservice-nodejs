@@ -10,8 +10,8 @@ import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 
 const loginContextMiddleware = (
-  req: Request,
-  res: Response,
+  req : Request,
+  res : Response,
   next: NextFunction
 ): void => {
   const logger = req.app.locals.logger;

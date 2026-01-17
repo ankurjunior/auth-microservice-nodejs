@@ -6,13 +6,11 @@
  * 2025 Ankur Gangwar
  */
 
-/**
- *
- */
+import log from "../../utils/logger.util.js";
 class ConsoleLogger {
 
-  log(level: string, event: string, payload: any) {
-    console.log(
+  loggerError(level: string, event: string, payload: any) {
+    log.error(
       JSON.stringify({
         level: level,
         event,
@@ -22,12 +20,25 @@ class ConsoleLogger {
     );
   }
 
+
+  loggerInfo(level: string, event: string, payload: any) {
+    log.info(
+      JSON.stringify({
+        level: level,
+        event,
+        payload,
+        timestamp: new Date().toISOString(),
+      })
+    );
+  }
+
+
   info(event: string, payload: any) {
-    return this.log("INFO", event, payload);
+    return this.loggerInfo("INFO", event, payload);
   }
 
   error(event: string, payload: any) {
-    return this.log("ERROR", event, payload);
+    return this.loggerError("ERROR", event, payload);
   }
 }
 

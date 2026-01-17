@@ -6,10 +6,10 @@
  * 2026 Ankur Gangwar
  */
 
-import { connnections } from '../config/';
-import DeviceGaurd from './device.guard';
-import RateLimiter from './rate.limiter';
-import IPGaurd from './ip.guard';
+import { connnections } from '../config/index.js';
+import DeviceGaurd from './device.guard.js';
+import RateLimiter from './rate.limiter.js';
+import IPGaurd from './ip.guard.js';
 import TokenGuard from './token.guard.js';
 
 

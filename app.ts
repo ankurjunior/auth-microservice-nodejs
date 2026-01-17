@@ -4,6 +4,7 @@
  * Created: 2025-12-21
  * Description: This file is intended for development and maintenance purposes. You are free to edit and modify this file as required.
  */
+import log from "./src/utils/logger.util.js";
 import express, { Application, Request, Response } from "express";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
@@ -57,14 +58,16 @@ app.get("/", (_req: Request, res: Response) => {
 /**
  * Auth module
  */
-app.use(
-  "/auth",
-  AuthModule({
+const authModule = await   AuthModule({
     mysql,
     mongo,
     redis,
     jwtConfig: JWTConfig,
-  })
+  });
+  
+app.use(
+  "/auth",
+  authModule  
 );
 
 /**
@@ -76,8 +79,8 @@ app.locals.logger = logger;
  * Server start
  */
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Swagger: http://localhost:${PORT}/api-docs`);
+  log.info(`Server running on port ${PORT}`);
+  log.info(`Swagger: http://localhost:${PORT}/api-docs`);
 });
 
 /**

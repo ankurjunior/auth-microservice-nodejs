@@ -9,7 +9,7 @@
 
 import mysql, { Pool } from "mysql2/promise";
 import dotenv from "dotenv";
-
+import log from "../utils/logger.util.js";
 dotenv.config();
 
 class MySQLDBClient {
@@ -38,11 +38,11 @@ class MySQLDBClient {
         });
 
         const conn = await MySQLDBClient.instance.getConnection();
-        console.log("MySQL connected");
+        log.warn("MySQL connected");
         conn.release();
       }
       catch (err: any) {
-        console.error("MySQL connection failed:", err.message);
+        log.error("MySQL connection failed:", err.message);
         process.exit(1);
       }
     }

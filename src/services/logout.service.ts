@@ -5,41 +5,32 @@
  * Description : Fri Jan 16 2026 00:03:17
  * 2026 Ankur Gangwar
  */
-
-import { securityGuards } from "../security/index.js"; 
-import Redis from "ioredis";
+ 
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 
-interface logoutPayload {
+interface LogoutPayload {
     accessToken: any, refreshJti: string
 }
 
-class LogoutService {
-    private redis: Redis;
+class LogoutService { 
 
-    constructor(redis: Redis) {
-        this.redis = redis;
-    }
+    constructor(private tokenGuard :any ) {  }
 
     /**
      * 
      * @param param0 
      */
-    async logout({ accessToken, refreshJti }: logoutPayload) {
-        const { tokenGuard } = await securityGuards();
-        const now = Math.floor(Date.now() / 1000);
-        const token = accessToken.split(" ")[1];
-    
-
+    async logout({ accessToken, refreshJti }: LogoutPayload) { 
+        const now = Math.floor(Date.now() / 1000);  
+        
         const payload = jwt.verify(
-            token,
+            accessToken,
             process.env.JWT_SECRET!,
             { ignoreExpiration: true }
         ) as JwtPayload;
-
-        // Access token revoke
-        await tokenGuard.block({ type: "access", jti: payload.jti, expireInSeconds: 1098765432 });
+  
+        await this.tokenGuard.block({ type: "access", jti: payload.jti, expireInSeconds: (payload.exp!-now) });
     }
 }
 
