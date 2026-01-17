@@ -5,6 +5,7 @@ declare module "express-serve-static-core" {
     deviceId:string;
     tokenService?:any;
     authService?:any;
+    logoutService?:any;
     context?: {
       requestId: string;
       ip?: string;

@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from "express";
 /**
  * Loading controllers
  */
-import {login} from "../controllers/auth.controller.js";
+import {login, logout} from "../controllers/auth.controller.js";
 import loginRequestLogger from "../logger/loginRequest.logger.js";
 import loginResultLogger from "../logger/loginResult.logger.js";
 import authTokenRotationLogger from "../logger/authTokenRotation.logger.js";
@@ -92,12 +92,47 @@ router.post(
  *       401:
  *         description: Invalid credentials
  */
-
 router.post("/refresh", AuthCheck, secure, authTokenRotationLogger, async (req: Request, res : Response, next: NextFunction) => {
   const { refreshToken } = req.body;
-  // const response = await req.tokenService.refresh(refreshToken);
-  const response = '';
+  const response = await req.tokenService.refresh(refreshToken); 
   return res.json(response);
 });
+
+
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout User
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshJti
+ *             properties:
+ *               refreshJti:
+ *                 type: string
+ *                 example: xxxxxxxxxxxx
+ *     responses:
+ *       200:
+ *         description: Uer Logged out
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Invalid credentials
+ */
+router.post("/logout", secure, logout);
 
 export default router;

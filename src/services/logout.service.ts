@@ -6,10 +6,41 @@
  * 2026 Ankur Gangwar
  */
 
-import {securityGuards} from "../security/index.js";
+import { securityGuards } from "../security/index.js"; 
+import Redis from "ioredis";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+
+interface logoutPayload {
+    accessToken: any, refreshJti: string
+}
 
 class LogoutService {
-    constructor (){
+    private redis: Redis;
 
+    constructor(redis: Redis) {
+        this.redis = redis;
+    }
+
+    /**
+     * 
+     * @param param0 
+     */
+    async logout({ accessToken, refreshJti }: logoutPayload) {
+        const { tokenGuard } = await securityGuards();
+        const now = Math.floor(Date.now() / 1000);
+        const token = accessToken.split(" ")[1];
+    
+
+        const payload = jwt.verify(
+            token,
+            process.env.JWT_SECRET!,
+            { ignoreExpiration: true }
+        ) as JwtPayload;
+
+        // Access token revoke
+        await tokenGuard.block({ type: "access", jti: payload.jti, expireInSeconds: 1098765432 });
     }
 }
+
+export default LogoutService;
