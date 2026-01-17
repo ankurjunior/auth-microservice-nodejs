@@ -16,7 +16,11 @@ export interface iPGuard {
 }
 
 export interface RateLimiter {
-  check(ip: string, route: string): Promise<void>;
+  check(ip: string): Promise<boolean>;
+}
+
+export interface  tokenGuard{
+  isBlocked({ type, jti }: gaurdPayload): Promise<void>;
 }
 
 /**
@@ -24,6 +28,7 @@ export interface RateLimiter {
  */
 export interface SecurityGuards {
   deviceGaurd: deviceGaurd;
-  iPGuard: iPGuard;
+  iPGuard    : iPGuard;
   rateLimiter: rateLimiter;
+  tokenGuard : tokenGuard;
 }

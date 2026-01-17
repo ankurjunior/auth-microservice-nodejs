@@ -50,6 +50,7 @@ class AccessTokenBuilder {
       .subject(user.id)
       .sessionId(user.sessionId)
       .role(user.role)
+      .jti()
       .claim("username", user.username)
       .tokenType("access");
 

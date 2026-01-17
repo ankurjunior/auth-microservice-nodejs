@@ -6,15 +6,9 @@
  * 2026 Ankur Gangwar
  */
 
-import { Request, Response } from "express";
-
-interface AuthRequest extends Request {
-  authService: {
-    login: (type: string, payload: any) => Promise<any>;
-  };
-}
+import { Request, Response } from "express"; 
  
-export const login = async (req: AuthRequest, res: Response): Promise<void> => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const token = await req.authService.login(
       req.params.type,
@@ -28,3 +22,20 @@ export const login = async (req: AuthRequest, res: Response): Promise<void> => {
     });
   }
 };
+
+
+
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    await req.logoutService.logout({
+      accessToken: req.headers.authorization,
+      refreshJTI: req.body?.refreshJti
+    });
+    res.json({ message: "Logged out successfully" });
+  } catch (err: any) {
+    res.status(403).json({
+      message: err.message || "Gadbad ho gai h!!"
+    }); 
+  }
+}

@@ -7,7 +7,7 @@
 
 
 import Redis from "ioredis";
-import PasswordStrategy from "../strategies/password.strategy";
+import PasswordStrategy from "../strategies/password.strategy.js";
 import OtpStrategy from "../strategies/otp.strategy";
 import HybridStrategy from "../strategies/hybrid.strategy";
 

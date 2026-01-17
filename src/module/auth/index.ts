@@ -9,8 +9,9 @@
 
 import express, { Request, Response, NextFunction } from "express";
 import authRoutes from "../../routes/auth.routes";
-import AuthService from "../../services/auth.service";
-import StrategyFactory from "../../factories/strategy.factory";
+import AuthService from "../../services/auth.service.js";
+import LogoutService from "../../services/logout.service.js";
+import StrategyFactory from "../../factories/strategy.factory.js";
 import UserRepository from "../../repositories/user.mysql.repo";
 import TokenFactory from "../../factories/token.factory";
 import TokenService from "../../services/token.service";
@@ -40,20 +41,18 @@ const  AuthModule = (options :any) => {
   });
 
 
-  const tokenService = new TokenService(tokenFactory);
-  const authService  = new AuthService({authStrategies, tokenService});
+  const tokenService  = new TokenService(tokenFactory);
+  const logoutService = new LogoutService(redis);
+  const authService   = new AuthService({authStrategies, tokenService});
 
 
   router.use((req: Request, res:Response, next:NextFunction) => {
-    req.authService = authService;
+    req.authService   = authService;
+    req.logoutService = logoutService;
+    req.tokenService  = tokenService;
     next();
   });
-
-
-  router.use((req, res, next) => {
-    req.tokenService = tokenService;
-    next();
-  });
+ 
  
 
   router.use(authRoutes);

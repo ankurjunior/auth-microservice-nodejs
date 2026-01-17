@@ -7,7 +7,7 @@
  */
 
 import crypto from "crypto";
-import { SecurityGuards } from "../types/security";
+import { SecurityGuards } from "../types/security.js";
 import { Request, Response, NextFunction } from "express";
 type SecurityGuardsType = ()=>Promise<SecurityGuards>;
 
